@@ -229,12 +229,12 @@ class Graph:
 
         if start_vertex == end_vertex:
             return True
-        
+
         for vert in self.vertices[start_vertex]:
             if vert not in visited:
                 if self.dfs(vert, end_vertex, visited):
                     pass
-                    
+
     # depth_first_search_path??
     def dfs_path(self, start_vertex, end_vertex, visited=None):
         stack = []

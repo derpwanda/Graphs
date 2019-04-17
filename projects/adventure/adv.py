@@ -37,6 +37,7 @@ traversalPath = ['n', 's']
 visited_rooms = set()
 player.currentRoom = world.startingRoom
 visited_rooms.add(player.currentRoom)
+
 for move in traversalPath:
     player.travel(move)
     visited_rooms.add(player.currentRoom)
