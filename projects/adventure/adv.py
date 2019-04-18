@@ -45,7 +45,7 @@ player = Player("Name", world.startingRoom)
 # print(f"PLAYER travel.(direction): ", player.travel('n')) #makes player move
 
 visited = {}
-print(f"visited rooms: ", visited)
+print(f"initial visited rooms: ", visited)
 
 
 def opposite(direction):
@@ -59,33 +59,26 @@ def opposite(direction):
         if direction == 'w':
             return 'e'
 
-# DFT
+# # DFT
 while len(visited) < 3:
     current = player.currentRoom.id
-    # print(f"CURRENT: ", current)
     if current not in visited:
         visited[current] = {i: '?' for i in player.currentRoom.getExits()}
-        print(f"VISITED", visited)
-        # iterate through nested dictionary
-        for room, exits in visited.items():
-            # {0: {'n': '?', 's': 2}}
-            print(f"VISITED 2", visited)
-            for direction, next_room in exits.items():
-                # {'n': '?', 's': 2}
-                if next_room == '?':
-                    # print(f"current", current)
-                    # print(f"before travel: ", next_room)
-                    # print(f"direction before travel: ", direction)
-                    player.travel(direction)
-                    discoveredroom = player.currentRoom.id
-                if discoveredroom not in visited:
-                    print(f"VISITED 3", visited)
-                    visited[discoveredroom] = {i: '?' for i in player.currentRoom.getExits()}
-                    # updates current dictionary entry
-                    visited[current][direction] = discoveredroom
-                    visited[discoveredroom][opposite(direction)] = current
-                    # print(oppositedirection(direction))
-                    # print(f"after travel:", discoveredroom)
+        print(f" Initial VISITED", visited)
+
+    for direction in visited[current]:
+        if visited[current][direction] == '?':
+            print(f"current", current)
+            print(f"direction before travel: ", direction)
+            player.travel(direction)
+        discoveredroom = player.currentRoom.id
+        if discoveredroom not in visited:
+            print(f"VISITED 3", visited)
+            visited[discoveredroom] = {i: '?' for i in player.currentRoom.getExits()}
+            # updates current dictionary entry
+            visited[current][direction] = discoveredroom
+            visited[discoveredroom][opposite(direction)] = current
+
 
 
 ###################################################

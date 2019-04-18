@@ -1,4 +1,5 @@
 import random
+import time
 
 
 class User:
@@ -67,7 +68,7 @@ class SocialGraph:
 
         # now we iterate through the possible friendships array, apply the splice: formula
         for friendship in possibleFriendships[: (numUsers * avgFriendships) // 2]:
-            print(f"CREATING FRIENDSHIP: {friendship}")
+            # print(f"CREATING FRIENDSHIP: {friendship}")
             # add the friendship pair using the addFriendship method written at top
             self.addFriendship(friendship[0], friendship[1])
 
@@ -91,27 +92,58 @@ class SocialGraph:
             # initial value of q is a single element,
             # in the future it will hold lists
             # grab the last item in list
-            # errors int not subscriptable. work around is to create an initial list container userID, then appending THAT to. 
+            # errors int not subscriptable. work around is to create an initial list container userID, then appending THAT to.
 
             # print(f"queue index 0: ", queue[0])
             # print(f"list before pop: ", queue)
-            path = queue.pop(0) # remove from index zero
+            path = queue.pop(0)  # remove from index zero
             new_ID = path[-1]
             if new_ID not in visited:
                 # each iteration we keep track of the node AND the path
                 # we add the id, then have a corresponding path we want to
                 # continue after it
-                visited[new_ID] = path  #key = value {key: value}
+                visited[new_ID] = path  # key = value {key: value}
                 for friend in self.friendships[new_ID]:
-                    new_path = list(path)
-                    new_path.append(friend)
-                    queue.append(new_path)
+                    if friend not in visited:
+                        new_path = list(path)
+                        new_path.append(friend)
+                        queue.append(new_path)
         return visited
 
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populateGraph(10, 2)
-    print(f"friendships:", sg.friendships)
+    start_time = time.time()
+    sg.populateGraph(1000, 5)
+    end_time = time.time()
+    print(f'runtime: {end_time - start_time} seconds')
+
+    # print(f"friendships:", sg.friendships)
     connections = sg.getAllSocialPaths(1)
-    print(f"connections:", connections)
+    # print(f"connections:", connections)
+
+    # total = 0
+
+    # for userID in connections:
+    #     total += len(connections[userID]) - 1
+    # print(len(connections))
+    # print(total / len(connections))
+
+    # totalConnections = 0
+    # totalDegrees = 0
+    # iterations = 10
+
+    # for i in range(0, iterations):
+    #     sg.populateGraph(1000, 5)
+    #     connections = sg.getAllSocialPaths(1)
+    #     total - 0
+
+    #     for userID in connections:
+    #         total += len(connections)
+    #     totalConnections += len(connections)
+    #     totalDegrees += total / len(connections)
+    #     print("------")
+    #     print(f"friends in network: {len(connections)}")
+    #     print(f"Avg degrees: {total / len(connections)}")
+    # print(totalConnections/iterations)
+    # print(totalDegrees / iterations)
