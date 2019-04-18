@@ -47,21 +47,45 @@ player = Player("Name", world.startingRoom)
 visited = {}
 print(f"visited rooms: ", visited)
 
+
+def opposite(direction):
+    if direction == 'n':
+        return 's'
+    elif direction == 's':
+        return 'n'
+    elif direction == 'e':
+        return 'w'
+    else:
+        if direction == 'w':
+            return 'e'
+
 # DFT
 while len(visited) < 3:
     current = player.currentRoom.id
+    # print(f"CURRENT: ", current)
     if current not in visited:
         visited[current] = {i: '?' for i in player.currentRoom.getExits()}
-        print(visited)
-
+        print(f"VISITED", visited)
         # iterate through nested dictionary
-        for room, directions in visited.items():
-            for direction, next_room in directions.items():
+        for room, exits in visited.items():
+            # {0: {'n': '?', 's': 2}}
+            print(f"VISITED 2", visited)
+            for direction, next_room in exits.items():
+                # {'n': '?', 's': 2}
                 if next_room == '?':
-                    # print(direction)
-                    print(next_room)
+                    # print(f"current", current)
+                    # print(f"before travel: ", next_room)
+                    # print(f"direction before travel: ", direction)
                     player.travel(direction)
-                    print(player.currentRoom.id)
+                    discoveredroom = player.currentRoom.id
+                if discoveredroom not in visited:
+                    print(f"VISITED 3", visited)
+                    visited[discoveredroom] = {i: '?' for i in player.currentRoom.getExits()}
+                    # updates current dictionary entry
+                    visited[current][direction] = discoveredroom
+                    visited[discoveredroom][opposite(direction)] = current
+                    # print(oppositedirection(direction))
+                    # print(f"after travel:", discoveredroom)
 
 
 ###################################################
