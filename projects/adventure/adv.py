@@ -64,25 +64,25 @@ if current not in visited:
 # while len(visited) < 12:
 room_exit = None
 for direction in visited[current]:
-    # print(player.currentRoom.id)
-    # print(visited[current])
-    if visited[current][direction] == '?':
+    if visited[current][direction] == '?':        
         room_exit = direction
 
     if room_exit is not None:
         traversalPath.append(room_exit)
         player.travel(room_exit)
-        discoveredroom = player.currentRoom.id
 
+        discoveredroom = player.currentRoom.id
         if discoveredroom not in visited:
             visited[discoveredroom] = {i: '?' for i in player.currentRoom.getExits()}
 
-        visited[current][room_exit] = discoveredroom
-        visited[discoveredroom][opposite(direction)] = current
-        current = discoveredroom
-
+    visited[current][room_exit] = discoveredroom
+    visited[discoveredroom][opposite(direction)] = current
+    current = discoveredroom
+    print(visited)
+    
     # if there are no unexplored question marks
     keys = bfs_path(visited, player.currentRoom.id)
+    print(keys)
     if keys is not None:
         for room in keys:
             for direction in visited[current]:
