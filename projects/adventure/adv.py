@@ -56,7 +56,7 @@ def bfs_path(graph, start_room):
                 queue.append(new_path)
     return None
 
-while len(mygraph) < 12:
+while len(mygraph) < 18:
     current = player.currentRoom.id
     if current not in mygraph:
         mygraph[current] = {i: '?' for i in player.currentRoom.getExits()}
