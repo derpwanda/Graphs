@@ -80,11 +80,22 @@ while len(visited) < 18:
         current = discoveredroom
     # returns a list of keys
     keys = bfs_path(visited, player.currentRoom.id)
-    print(keys)
+    # room_list = keys
 
-
-
+    print(f"roomlist: {keys}")
+   
+    current = player.currentRoom.id
+    while len(list(keys)) > 1:
+        print(f"current Room: {player.currentRoom.id}")
+        # remove the first room/ we should be in this room
+        keys.pop(0)
+        for direction in visited[current]:  # for direction in current room
+            if visited[current][direction] == keys[0]:  # if a direction value matches first item in list
+                traversalPath.append(direction)
+                player.travel(direction)
+                print(player.currentRoom.id)
     
+
 ###################################################
 # FILL THIS IN
 
