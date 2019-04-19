@@ -40,14 +40,10 @@ world.printRooms()
 player = Player("Name", world.startingRoom)
 
 # print(f"PLAYER currentRoom: ", player.currentRoom)
-print(f"PLAYER currentRoom.id: ", player.currentRoom.id)
-print(f"PLAYER currentRoom.getExits(): ", player.currentRoom.getExits())
+# print(f"PLAYER currentRoom.id: ", player.currentRoom.id)
+# print(f"PLAYER currentRoom.getExits(): ", player.currentRoom.getExits())
 # print(f"PLAYER travel.(direction): ", player.travel('n')) #makes player move
 
-visited = {}
-print(f"initial visited rooms: ", visited)
-
-traversalPath = ['n', 's']
 
 def opposite(direction):
     if direction == 'n':
@@ -59,29 +55,35 @@ def opposite(direction):
     elif direction == 'w':
         return 'e'
 
-options = []
-# # # DFT
-# while len(visited) < 18:
+# visited = {0: {'n': '?', 's': '5', 'w': '8', 'e': '7'}}
+visited = {}
+traversalPath = []
+
 current = player.currentRoom.id
 if current not in visited:
     visited[current] = {i: '?' for i in player.currentRoom.getExits()}
 
-for direction in visited[current]:
-    if visited[current][direction] is '?':
-        traversalPath.append(direction)
-        player.travel(direction)
-        discoveredroom = player.currentRoom.id
+while len(visited) < 18:
+    room_exit = None
+    for direction in visited[current]:
+        if visited[current][direction] is '?':
+            room_exit = direction
 
-    if discoveredroom not in visited:
-        visited[discoveredroom] = {i: '?' for i in player.currentRoom.getExits()}
-        # updates current dictionary entry
-        visited[current][direction] = discoveredroom
-        visited[discoveredroom][opposite(direction)] = current
+            if room_exit is not None:
+                traversalPath.append(room_exit)
+                player.travel(room_exit)
 
-if visited[current][direction] is not '?':
-        pass
-print(f"VISITED 3", visited)
+                discoveredroom = player.currentRoom.id
 
+                if discoveredroom not in visited:
+                    visited[discoveredroom] = {i: '?' for i in player.currentRoom.getExits()}
+
+                visited[current][room_exit] = discoveredroom
+                visited[discoveredroom][opposite(direction)] = current
+                print(visited)
+                current = discoveredroom
+            else:
+                pass
 
 
 ###################################################
