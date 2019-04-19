@@ -55,35 +55,52 @@ def opposite(direction):
     elif direction == 'w':
         return 'e'
 
-# visited = {0: {'n': '?', 's': '5', 'w': '8', 'e': '7'}}
-visited = {}
+visited = {0: {'n': '?', 's': '?', 'w': '?', 'e': 3}, 3:{'w': 0, 'e': 4}, 4: {'w': 3}}
+# visited = {}
 traversalPath = []
 
-current = player.currentRoom.id
-if current not in visited:
-    visited[current] = {i: '?' for i in player.currentRoom.getExits()}
 
-while len(visited) < 18:
-    room_exit = None
-    for direction in visited[current]:
-        if visited[current][direction] is '?':
-            room_exit = direction
+def bfs_path(graph, start_room):
+    queue = []
+    queue.append([start_room])
+    while queue:
+        path = queue.pop(0)
+        x_room = path[-1]
+        if x_room not in visited:
+            visited[x_room] = {i: '?' for i in player.currentRoom.getExits()}
+            print(graph[x_room])
+            for room_exit in graph[x_room]:
+                if graph[x_room][room_exit] == '?':
+                    return path
+            for x in visited[x_room]:
+                new_path = list(path)
+                new_path.append(x)
+                queue.append(new_path)
 
-            if room_exit is not None:
-                traversalPath.append(room_exit)
-                player.travel(room_exit)
+bfs_path(visited, player.currentRoom.id)
 
-                discoveredroom = player.currentRoom.id
+# current = player.currentRoom.id
+# if current not in visited:
+#     visited[current] = {i: '?' for i in player.currentRoom.getExits()}
 
-                if discoveredroom not in visited:
-                    visited[discoveredroom] = {i: '?' for i in player.currentRoom.getExits()}
+# while len(visited) < 18:
+#     room_exit = None
+#     for direction in visited[current]:
+#         if visited[current][direction] == '?':
+#             room_exit = direction
 
-                visited[current][room_exit] = discoveredroom
-                visited[discoveredroom][opposite(direction)] = current
-                print(visited)
-                current = discoveredroom
-            else:
-                pass
+#     if room_exit is not None:
+#         traversalPath.append(room_exit)
+#         player.travel(room_exit)
+#         discoveredroom = player.currentRoom.id
+
+#         if discoveredroom not in visited:
+#             visited[discoveredroom] = {i: '?' for i in player.currentRoom.getExits()}
+
+#         visited[current][room_exit] = discoveredroom
+#         visited[discoveredroom][opposite(direction)] = current
+#         current = discoveredroom
+#     bfs_path(visited, player.currentRoom.id)
 
 
 ###################################################
