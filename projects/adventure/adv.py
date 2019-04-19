@@ -56,22 +56,18 @@ def bfs_path(graph, start_room):
                 queue.append(new_path)
     return None
 
-while len(mygraph) < 500:
+while len(mygraph) is not len(roomGraph):
     current = player.currentRoom.id
     if current not in mygraph:
         mygraph[current] = {i: '?' for i in player.currentRoom.getExits()}
 
     room_exit = None
-    print(f"before FOR", mygraph)
-    print(f"room before FOR", player.currentRoom.id)
     for direction in mygraph[current]:
         if mygraph[current][direction] == '?':
             room_exit = direction
-            print(f"before travel", player.currentRoom.id)
             if room_exit is not None:
                 traversalPath.append(room_exit)
                 player.travel(room_exit)
-                print(f"after travel", player.currentRoom.id)
                 discovered = player.currentRoom.id
 
                 if discovered not in mygraph:
@@ -92,6 +88,7 @@ while len(mygraph) < 500:
                     traversalPath.append(direction)
                     player.travel(direction)
                     current = player.currentRoom.id
+
 print(mygraph)
 ###################################################
 # FILL THIS IN
