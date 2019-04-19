@@ -75,11 +75,11 @@ for direction in visited[current]:
         if discoveredroom not in visited:
             visited[discoveredroom] = {i: '?' for i in player.currentRoom.getExits()}
 
-    visited[current][room_exit] = discoveredroom
-    visited[discoveredroom][opposite(direction)] = current
-    current = discoveredroom
-    print(visited)
-    
+        visited[current][room_exit] = discoveredroom
+        visited[discoveredroom][opposite(direction)] = current
+        current = discoveredroom
+        print(visited)
+
     # if there are no unexplored question marks
     keys = bfs_path(visited, player.currentRoom.id)
     print(keys)
