@@ -60,9 +60,12 @@ graph3 = {
 class Graph:
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
 
-    def __init__(self):
-        # self.vertices = graph
-        self.vertices = {}
+    # def __init__(self):
+    #     self.vertices = {}
+
+    def __init__(self, graph):
+        self.vertices = graph
+
 
     def add_vertex(self, vertex_id):
         self.vertices[vertex_id] = set()
@@ -97,20 +100,21 @@ class Graph:
         # create a set to store your vertices
         visited = set()
         # create tracker to return ordered list of nodes
-        tracker = []  
+        tracker = []
         # sets are chosen because they are faster to index
         # sets cant hold duplicates
         print(f"bf trav start", start_vertex)
         while queue:
             # dequeue a vertex from queue
-            for i in self.vertices[queue[0]]:
-                # if i is not in visited:
-                if i not in queue and i not in visited:
-                    # add to queue
-                    queue.append(i)
-        #  print(f"visited vertex: ", {queue[0]})
-            tracker.append(queue[0])
-            visited.add(queue.pop(0))
+            v = queue.pop(0)
+            print(f"v", v)
+            print(f"queue", queue)
+            if v not in visited:
+                visited.add(v)
+                # tracker.append(queue[0])
+
+                for next_vert in self.vertices[v]:
+                    queue.append(next_vert)
 
         print(f"bf trav visited", visited)
         print(f"bf trav tracker", tracker)
@@ -129,23 +133,30 @@ class Graph:
         # the difference is that we use stack in dft and queue in bft
         # this also means we add/remove from the front/index[0] in bft
         # but add/remove to the end in dft
-        stack = []  # initialize a stack
+        stack = []
         stack.append(start_vertex)
+        # create a set to store your vertices
+        # sets are chosen because they are faster to index
+        # sets cant hold duplicates
         visited = set()
-        tracker = []
-        # tracker.append(start_vertex)
+
         print(f"df trav start", start_vertex)
+        print(f"start stack", stack)
         while stack:
             # dequeue a vertex from queue
-            current = stack.pop()
-            for i in self.vertices[current]:
-                if i not in stack and i not in visited:
-                    stack.append(i)
-            tracker.append(current)
-            visited.add(current)
+            v = stack.pop()
+            print(f"v", v)
+            print(f"stack", stack)
+
+            if v not in visited:
+                # mark as visited
+                visited.add(v)
+
+                # then add all of its neighbors to the back of the queue
+                for next_vert in self.vertices[v]:
+                    stack.append(next_vert)
 
         print(f"df trav visited", visited)
-        print(f"df trav tracker", tracker)
 
     # depth_first_traversal_recursive
     def dft_r(self, start_vertex, visited=None):
@@ -179,14 +190,16 @@ class Graph:
 
         while queue:
             path = queue.pop(0)
-            v = path[-1]  # grabs the last item (not int) from a list
-            if v not in visited:
-                visited.add(v)
-                if v == end_vertex:
+            print(f"path before: ", path)
+            current = path[-1]  # grabs the last item (not int) from a list
+            print(f"the value of v: ", current)
+            if current not in visited:
+                visited.add(current)
+                if current == end_vertex:
                     return path
-                for i in self.vertices[v]:
+                for x in self.vertices[current]:
                     new_path = list(path)
-                    new_path.append(i)
+                    new_path.append(x)
                     queue.append(new_path)
         return None
 
@@ -206,16 +219,32 @@ class Graph:
                 for i in self.vertices[current]:
                     # if i not in visited:
                     stack.append(i)
+        return visited
     # comment on reasons why dfs returns an set, not array like BFS
 
-    # depth_first_search_recursive?? Nope
     def dfs_r(self, start_vertex, end_vertex, visited=None):
+        if visited is None:
+            visited = set()
+        visited.add(start_vertex)
+
+        if start_vertex == end_vertex:
+            return True
+
+        for vert in self.vertices[start_vertex]:
+            if vert not in visited:
+                if self.dfs(vert, end_vertex, visited):
+                    pass
+
+    # depth_first_search_path??
+    def dfs_path(self, start_vertex, end_vertex, visited=None):
         stack = []
         stack.append([start_vertex])
         visited = set()
+
         while stack:
             path = stack.pop()
             v = path[-1]
+
             if v not in visited:
                 if v == end_vertex:
                     return path
@@ -242,11 +271,11 @@ class Graph:
                     return new_path
         return None
 
-""" g = Graph(graph3)
-print(g.breadth_first_traversal("2"))
-print(g.depth_first_traversal("2"))
-print(g.depth_first_trav_recursive("2", ))
+g = Graph(graph3)
+# print(g.bft("2"))
+# print(g.dft("2"))
+print(f"bfs: ", g.bfs_path("2", "7"))
 
-# find a path
-print(g.breadth_first_search("1", "6")) # start, find
-print(g.depth_first_search("1", "6")) # start, find """
+# # find a path
+# print(g.breadth_first_search("1", "6")) # start, find
+# print(g.depth_first_search("1", "6")) # start, find
