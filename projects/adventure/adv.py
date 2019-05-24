@@ -56,8 +56,8 @@ def bfs_path(graph, start_room):
                 queue.append(new_path)
     return None
 
-
-while len(mygraph) != len(roomGraph):
+#working with < 500 OR != len(roomGraph)
+while len(mygraph) < 500:
     current = player.currentRoom.id
     if current not in mygraph:
         mygraph[current] = {i: '?' for i in player.currentRoom.getExits()}
@@ -81,11 +81,9 @@ while len(mygraph) != len(roomGraph):
 
     # if there are no unexplored question marks
     keys = bfs_path(mygraph, player.currentRoom.id)
-    print(keys)
     if keys is not None:
         for room in keys:
             for direction in mygraph[current]:
-                print(f"mg d", mygraph[current])
                 if mygraph[current][direction] == room:
                     traversalPath.append(direction)
                     player.travel(direction)
